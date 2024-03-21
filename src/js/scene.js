@@ -27,8 +27,14 @@ const scene = new THREE.Scene();
 /* Model */
 const loader = new GLTFLoader();
 loader.load("bmw.glb", (gltf) => {
+  const modelBmw = gltf.scene;
+
+  modelBmw.position.x = 8.5;
+  modelBmw.position.y = -6.5;
+  modelBmw.position.z = -15;
+  modelBmw.rotation.y = -1.2;
   // Das geladene Modell wird der Szene hinzugefügt
-  //scene.add(gltf.scene);
+  scene.add(modelBmw);
 });
 
 /**** Objects ****/
@@ -37,9 +43,9 @@ const plane = Plane();
 const shaderGeo = ShaderGeo();
 
 /**** Position ****/
-cube.position.set(1, 1, 0);
-plane.position.set(-1, -1, 0);
-shaderGeo.position.set(-3, 2, -5);
+cube.position.set(1.3, 1, 0);
+plane.position.set(-2, -1, 0);
+shaderGeo.position.set(-4, 2, -5);
 
 /**** Lights ****/
 const ambienteLight = AmbientLight();
