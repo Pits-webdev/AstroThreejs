@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
 export const AmbientLight = () => {
-  const light = new THREE.AmbientLight("#222222", 0.5);
+  const light = new THREE.AmbientLight("red", 1);
   return light;
 };

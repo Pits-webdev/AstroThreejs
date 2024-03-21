@@ -10,13 +10,16 @@ loader.load("bmw.glb", (gltf) => {
  */
 
 import * as THREE from "three";
-
+import { Controls } from "./controls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { Bmw } from "./Models/bmw.js";
+import GUI from "lil-gui";
 
+import { Bmw } from "./Models/bmw.js";
 import { Cube } from "./Geometries/cube";
 import { Plane } from "./Geometries/plane";
 import { ShaderGeo } from "./Geometries/shaderGeo.js";
+
+import { AmbientLight } from "./Lights/ambienteLight.js";
 
 const app = document.querySelector(".app");
 const scene = new THREE.Scene();
@@ -38,21 +41,27 @@ cube.position.set(1, 1, 0);
 plane.position.set(-1, -1, 0);
 shaderGeo.position.set(-3, 2, -5);
 
+/**** Lights ****/
+const ambienteLight = AmbientLight();
+
 //Add Scene
-scene.add(plane, cube, shaderGeo);
+scene.add(plane, cube, shaderGeo, ambienteLight);
 
-// Lights
-const light = new THREE.AmbientLight(0x404040); // soft white light
-scene.add(light);
+// Gui
+const gui = new GUI({
+  closeFolders: true,
+});
+gui.title("Astro js | Three js");
 
-/* gui.add(pointLight.position, "x").min(-3).max(3).step(0.01);
-gui.add(pointLight.position, "y").min(-3).max(3).step(0.01);
-gui.add(pointLight.position, "z").min(-3).max(3).step(0.01);
-
-const col = { color: "#00ff00" };
-gui.addColor(col, "color").onChange(() => {
-  pointLight.color.set(col.color);
-}); */
+//Cube Gui
+const folderCube = gui.addFolder("Cube");
+folderCube.add(cube.position, "x", -2, 2, 0.01).name("pos: x");
+folderCube.add(cube.position, "y", -2, 2, 0.01).name("pos: y");
+folderCube.add(cube.position, "z", -2, 2, 0.01).name("pos: z");
+folderCube.add(cube.rotation, "y", 0, Math.PI * 2, 0.01).name("rotation: y");
+folderCube.add(cube.material, "wireframe");
+folderCube.add(cube, "visible");
+folderCube.addColor(cube.material, "color");
 
 // Sizes
 const sizes = {
@@ -87,9 +96,12 @@ camera.position.y = 0;
 camera.position.z = 2;
 scene.add(camera);
 
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
+//OrbitControls
+const controls = Controls(camera, app);
+controls.enableDamping = true;
+controls.enableZoom = false;
+controls.autoRotate = false;
+controls.autoRotateSpeed = 0.5;
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -109,7 +121,7 @@ const tick = () => {
   shaderGeo.material.uniforms.time.value = 1.2 * elapsedTime;
 
   // Update Orbital Controls
-  // controls.update()
+  controls.update();
 
   // render
   renderer.render(scene, camera);

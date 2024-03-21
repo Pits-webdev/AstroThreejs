@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "Astro Three js",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -12,5 +12,8 @@
   "dependencies": {
     "astro": "^4.5.6",
     "three": "^0.162.0"
+  },
+  "devDependencies": {
+    "lil-gui": "^0.19.2"
   }
 }
